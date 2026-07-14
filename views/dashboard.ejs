@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - Student Portal</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="brand">Student Portal</a>
+    <div class="nav-links">
+      <span class="nav-user">Hi, <%= user.name %></span>
+      <form action="/logout" method="POST" class="inline-form">
+        <button type="submit" class="btn btn-outline">Logout</button>
+      </form>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h1>Dashboard</h1>
+
+    <section>
+      <h2>My Courses (<%= enrolledCourses.length %>)</h2>
+
+      <% if (enrolledCourses.length === 0) { %>
+        <p class="muted">You haven't enrolled in any courses yet. Pick one below.</p>
+      <% } else { %>
+        <div class="course-grid">
+          <% enrolledCourses.forEach(function(course) { %>
+            <div class="card course-card enrolled">
+              <h3><%= course.title %></h3>
+              <p><%= course.description %></p>
+              <p class="instructor">Instructor: <%= course.instructor %></p>
+              <span class="badge">Enrolled</span>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </section>
+
+    <section>
+      <h2>All Courses</h2>
+      <div class="course-grid">
+        <% courses.forEach(function(course) { %>
+          <div class="card course-card">
+            <h3><%= course.title %></h3>
+            <p><%= course.description %></p>
+            <p class="instructor">Instructor: <%= course.instructor %></p>
+
+            <% if (enrolledIds.includes(course.id)) { %>
+              <span class="badge">Enrolled</span>
+            <% } else { %>
+              <form action="/enroll/<%= course.id %>" method="POST">
+                <button type="submit" class="btn btn-primary">Enroll</button>
+              </form>
+            <% } %>
+          </div>
+        <% }) %>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
